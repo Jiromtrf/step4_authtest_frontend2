@@ -23,7 +23,9 @@ export default function Dashboard() {
       const userId = session.user.name;
       console.log("Fetching skills for user_id:", userId);
 
-      fetch(`http://127.0.0.1:8000/api/user/skills?user_id=${userId}`)
+      const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+      fetch(`${baseUrl}/api/user/skills?user_id=${userId}`)
         .then((res) => {
           if (!res.ok) {
             throw new Error("Failed to fetch skills data");
