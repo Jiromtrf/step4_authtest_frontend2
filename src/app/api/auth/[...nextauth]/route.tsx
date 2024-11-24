@@ -1,9 +1,9 @@
 import NextAuth, { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 
 export const authOptions: AuthOptions = {
-  secret: process.env.NEXTAUTH_SECRET, // 環境変数からシークレットキーを取得
+  secret: process.env.NEXTAUTH_SECRET,
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -15,9 +15,7 @@ export const authOptions: AuthOptions = {
         if (!credentials) {
           throw new Error("Credentials are missing");
         }
-
         try {
-          // ユーザー認証リクエスト
           const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
           const response = await axios.post(`${baseUrl}/api/auth/login`, {
             user_id: credentials.user_id,
@@ -29,22 +27,21 @@ export const authOptions: AuthOptions = {
           }
           return null;
         } catch (error) {
-          // AxiosErrorとして型を指定
-          const axiosError = error as AxiosError;
-          console.error("Authorization error:", axiosError.response?.data || axiosError.message);
+          console.error("Authorization error:", error);
           return null;
         }
       },
     }),
   ],
   pages: {
-    signIn: "/auth/signin", // カスタムログインページ
+    signIn: "/auth/signin",
   },
   session: {
-    strategy: "jwt", // JWTベースのセッション管理
+    strategy: "jwt",
   },
 };
 
-// ハンドラーのエクスポート
 const handler = NextAuth(authOptions);
+
+// 正しいハンドラーのエクスポート
 export { handler as GET, handler as POST };
