@@ -1,8 +1,8 @@
-import NextAuth, { AuthOptions } from "next-auth";
+import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import axios from "axios";
 
-export const authOptions: AuthOptions = {
+export const authOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   providers: [
     CredentialsProvider({
@@ -15,6 +15,7 @@ export const authOptions: AuthOptions = {
         if (!credentials) {
           throw new Error("Credentials are missing");
         }
+
         try {
           const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
           const response = await axios.post(`${baseUrl}/api/auth/login`, {
