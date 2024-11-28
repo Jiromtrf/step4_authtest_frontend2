@@ -1,8 +1,11 @@
 "use client";
 
+// src/app/layout.tsx
+
+import { ReactNode } from "react";
 import { SessionProvider } from "next-auth/react";
 
-export default function RootLayout({ children }) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <body>
@@ -11,3 +14,4 @@ export default function RootLayout({ children }) {
     </html>
   );
 }
+
