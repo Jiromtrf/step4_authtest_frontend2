@@ -24,7 +24,7 @@ export const authOptions: AuthOptions = {
             user_id: credentials.user_id,
             password: credentials.password,
           });
-      
+
           if (response.status === 200 && response.data) {
             return { id: response.data.user_id, name: response.data.user_id };
           } else {
@@ -32,11 +32,16 @@ export const authOptions: AuthOptions = {
           }
         } catch (error) {
           console.error("Authorization error:", error);
-      
-          // エラーメッセージを明示的にスローする
-          throw new Error(error.response?.data?.detail || "Authentication failed");
+
+          if (axios.isAxiosError(error)) {
+            // AxiosError の場合、詳細なエラーメッセージを取得
+            throw new Error(error.response?.data?.detail || "Authentication failed");
+          } else {
+            // その他のエラー
+            throw new Error("Authentication failed");
+          }
         }
-      }
+      },
     }),
   ],
   pages: {
