@@ -10,7 +10,7 @@ export const authOptions: AuthOptions = {
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        user_id: { label: "User ID", type: "text" },
+        username: { label: "User ID", type: "text" }, // 修正ポイント
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
@@ -21,7 +21,7 @@ export const authOptions: AuthOptions = {
         try {
           const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
           const response = await axios.post(`${baseUrl}/api/auth/login`, {
-            user_id: credentials.user_id,
+            user_id: credentials.username, // 修正ポイント
             password: credentials.password,
           });
 

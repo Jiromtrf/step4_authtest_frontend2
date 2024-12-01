@@ -2,31 +2,34 @@
 
 import { signIn } from "next-auth/react";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function SignIn() {
-  const [user_id, setUserId] = useState<string>(""); // 型指定
-  const [password, setPassword] = useState<string>(""); // 型指定
+  const router = useRouter();
+  const [user_id, setUserId] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [error, setError] = useState<string>("");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const result = await signIn("credentials", {
-      redirect: false, // カスタムリダイレクトを使用
-      user_id,
+      redirect: false,
+      username: user_id, // 修正ポイント
       password,
     });
 
     if (result?.ok) {
-      // 成功時にダッシュボードへリダイレクト
-      window.location.href = "/dashboard";
+      router.push("/dashboard");
     } else {
-      alert("Login failed! Please check your credentials.");
+      setError("ログインに失敗しました。ユーザーIDまたはパスワードを確認してください。");
     }
   };
 
   return (
     <div>
       <h1>Sign In</h1>
+      {error && <p style={{ color: "red" }}>{error}</p>}
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="user_id">User ID:</label>
