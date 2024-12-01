@@ -17,23 +17,26 @@ export const authOptions: AuthOptions = {
         if (!credentials) {
           throw new Error("Credentials are missing");
         }
-
+      
         try {
           const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
           const response = await axios.post(`${baseUrl}/api/auth/login`, {
             user_id: credentials.user_id,
             password: credentials.password,
           });
-
+      
           if (response.status === 200 && response.data) {
             return { id: response.data.user_id, name: response.data.user_id };
+          } else {
+            throw new Error("Authentication failed");
           }
-          return null;
         } catch (error) {
           console.error("Authorization error:", error);
-          return null;
+      
+          // エラーメッセージを明示的にスローする
+          throw new Error(error.response?.data?.detail || "Authentication failed");
         }
-      },
+      }
     }),
   ],
   pages: {
